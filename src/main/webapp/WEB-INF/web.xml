@@ -5,18 +5,5 @@
         <description>Vaadin production mode</description>
         <param-name>productionMode</param-name>
         <param-value>true</param-value>
-    </context-param>
-    <servlet>
-        <servlet-name>Vaadin</servlet-name>
-        <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
-        <init-param>
-            <description>Vaadin UI to display</description>
-            <param-name>UI</param-name>
-            <param-value>com.vaadin.tutorial.addressbook.AddressbookUI</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Vaadin</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+    </context-param> 
 </web-app>

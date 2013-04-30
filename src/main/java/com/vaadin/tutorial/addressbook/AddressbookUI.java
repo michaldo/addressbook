@@ -1,5 +1,10 @@
 package com.vaadin.tutorial.addressbook;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
@@ -29,6 +34,8 @@ import com.vaadin.ui.VerticalLayout;
  * embed your UI to an existing web page. 
  */
 @Title("Addressbook")
+@SessionScoped 
+@PreserveOnRefresh
 public class AddressbookUI extends UI {
 
 	/* User interface components are stored in session. */
@@ -47,11 +54,19 @@ public class AddressbookUI extends UI {
 			"Home Email", "Street", "City", "Zip", "State", "Country" };
 
 	/*
-	 * Any component can be bound to an external data source. This example uses
-	 * just a dummy in-memory list, but there are many more practical
-	 * implementations.
+	 * This example uses just a dummy in-memory list, but EJB is engaged in 
+	 * construction the list.
 	 */
-	IndexedContainer contactContainer = createDummyDatasource();
+	
+	@Inject
+	private NameRegistryBean nameRegistryBean;
+	
+	IndexedContainer contactContainer;
+	
+	@PostConstruct
+	private void initContactContainer() {
+		contactContainer = createDummyDatasource();
+	}
 
 	/*
 	 * After UI class is created, init() is executed. You should build and wire
@@ -256,7 +271,7 @@ public class AddressbookUI extends UI {
 	 * we could be using SQLContainer, JPAContainer or some other to persist the
 	 * data.
 	 */
-	private static IndexedContainer createDummyDatasource() {
+	private  IndexedContainer createDummyDatasource() {
 		IndexedContainer ic = new IndexedContainer();
 
 		for (String p : fieldNames) {
@@ -264,12 +279,8 @@ public class AddressbookUI extends UI {
 		}
 
 		/* Create dummy data by randomly combining first and last names */
-		String[] fnames = { "Peter", "Alice", "Joshua", "Mike", "Olivia",
-				"Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik", "Rene",
-				"Lisa", "Marge" };
-		String[] lnames = { "Smith", "Gordon", "Simpson", "Brown", "Clavel",
-				"Simons", "Verne", "Scott", "Allison", "Gates", "Rowling",
-				"Barks", "Ross", "Schneider", "Tate" };
+		String[] fnames = nameRegistryBean.getFirstNames();
+		String[] lnames = nameRegistryBean.getLastNames();
 		for (int i = 0; i < 1000; i++) {
 			Object id = ic.addItem();
 			ic.getContainerProperty(id, FNAME).setValue(
