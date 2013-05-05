@@ -5,7 +5,7 @@ This tutorial show how to integrate Vaadin 7 application with JEE6. The tutorial
 
 Running the example
 -------------------
-mvn tomee:run
+mvn jetty:run
 
 
 Importing in Eclipse
